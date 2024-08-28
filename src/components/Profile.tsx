@@ -2,9 +2,11 @@ import { Avatar, Box } from '@mui/material';
 import React from 'react';
 import WebsiteName from './WebsiteName';
 import AvatarDemo from './Avatar';
+import ArticleList from './ArticleList';
 
 function Profile() {
   return (
+    <div>
     <Box
       sx={{
         display: 'flex',
@@ -15,7 +17,10 @@ function Profile() {
     >
       <WebsiteName />
       <AvatarDemo />
+      
     </Box>
+  <ArticleList/>
+</div>
   );
 }
 

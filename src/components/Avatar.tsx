@@ -2,7 +2,8 @@ import React from 'react';
 import { Avatar, Button, Popover, List, ListItem, ListItemButton, ListItemText, Divider, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { deepPurple } from '@mui/material/colors';
-
+import Person2Icon from '@mui/icons-material/Person2';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const AvatarDemo = () => {
   const firstletterofusername: string | null = localStorage.getItem('username');
@@ -67,18 +68,29 @@ const AvatarDemo = () => {
         <List disablePadding>
           <ListItem disablePadding>
             <ListItemButton onClick={navigateToProfile}>
-              <ListItemText primary="Profile" />
+            <Person2Icon color="action" fontSize="medium"
+            sx={{
+              marginRight:1
+            }}
+            />
+              <ListItemText 
+              primary="Profile" />
             </ListItemButton>
           </ListItem>
-          <Divider />
+          {/* <Divider />
           <ListItem disablePadding>
             <ListItemButton onClick={navigateToArticle}>
               <ListItemText primary="Article" />
             </ListItemButton>
           </ListItem>
-          <Divider />
+          <Divider /> */}
           <ListItem disablePadding>
             <ListItemButton onClick={navigateToSignin}>
+            <LogoutIcon color="action" fontSize="medium" 
+            sx={{
+              marginRight:1
+            }}
+            />
               <ListItemText primary="Log out" />
             </ListItemButton>
           </ListItem>

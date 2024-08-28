@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardActions, CardContent, CardMedia, Typography, Button, Box } from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, Typography, Button, Box, Avatar, Stack } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { formatDistanceToNow } from 'date-fns';
+import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
+import AllArticleData from './AllArticleData';
 
 interface ArticleCardProps {
   image: string;
@@ -8,6 +13,7 @@ interface ArticleCardProps {
   description: string;
   favorited: boolean;
   favoritesCount: number;
+  createdAt: string;
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -17,10 +23,24 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   description,
   favorited,
   favoritesCount,
+  createdAt,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  // Handler to toggle the favorited state
+  const handleClick = () => {
+    setIsFavorited(prev => !prev);
+  };
+
+  const showingDetails = () => {
+      <AllArticleData/>
+  }
+
+
   return (
+  <div onClick={showingDetails} style={{ cursor: 'pointer'}}>
     <Card
       sx={{
         width: { xs: '100%', sm: '250px', md: '300px' },
@@ -33,15 +53,50 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         position: 'relative',
         backgroundColor: 'snow',
         border: '1px solid #ddd',
-        marginLeft:'12'
+        minWidth: 380,
       }}
     >
-      <CardMedia
-        component="img"
-        image={image}
-        alt={title}
-        sx={{ width: '100%', height: '150px', objectFit: 'cover' }}
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: 2,
+        }}
+      >
+        <Stack direction="row" spacing={2}>
+          <Avatar
+            alt="Author"
+            src={image}
+            sx={{ width: 56, height: 56 }}
+          />
+        </Stack>
+        <Box>
+          <Typography
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              marginRight: 16,
+              marginTop: 2,
+              fontVariant: 'contextual',
+              textDecorationStyle: 'solid',
+            }}
+          >
+            {author}
+          </Typography>
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              fontSize: 'subtitle1',
+            }}
+          >
+            {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
+          </Typography>
+        </Box>
+      </Box>
+
       <CardContent
         sx={{
           flex: 1,
@@ -63,26 +118,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             WebkitBoxOrient: 'vertical',
             fontSize: '1rem',
             marginBottom: 0.5,
-            textDecorationColor:'ThreeDDarkShadow',
-            textDecorationStyle:'dashed'
+            textDecorationColor: 'ThreeDDarkShadow',
+            textDecorationStyle: 'dashed',
           }}
         >
           {title}
-        </Typography>
-        <Typography
-          variant="subtitle2"
-          color="text.secondary"
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 1,
-            WebkitBoxOrient: 'vertical',
-            fontSize: '0.875rem',
-            marginBottom: 0.5,
-          }}
-        >
-          {author}
         </Typography>
         <Typography
           variant="body2"
@@ -100,10 +140,42 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           {description}
         </Typography>
       </CardContent>
+
       <CardActions
-        sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: 1,
+        }}
       >
-        <Button size="small" onClick={() => setIsOpen(true)}>Show Details</Button>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <FormatListNumberedOutlinedIcon color='action' fontSize='medium'/>
+         
+
+<div onClick={handleClick} style={{ cursor: 'pointer' }}>
+      {isFavorited ? (
+        <FavoriteIcon
+          sx={{
+            padding: 1,
+          }}
+          color='success'
+          fontSize='medium'
+        />
+      ) : (
+        <FavoriteBorderIcon
+          color='disabled'
+          fontSize='medium'
+        />
+      )}
+    </div>
+          
+        </Box>
       </CardActions>
 
       {isOpen && (
@@ -138,6 +210,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         </Box>
       )}
     </Card>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ const ArticleCardWrapper: React.FC = () => {
     description: 'This is a sample article description.',
     favorited: false,
     favoritesCount: 42,
+    createdAt: "2024-08-21T14:30:10.180Z",
   };
 
   return <ArticleCard {...sampleArticle} />;

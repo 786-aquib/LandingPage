@@ -65,34 +65,62 @@ const ArticleList: React.FC = () => {
   return (
     <Box
       sx={{
+        bgcolor: 'aliceblue',
         display: 'flex',
-        flexWrap: 'wrap',
-        gap: 4,
-        padding: 2,
+        flexDirection: 'column',
+        alignItems: 'center',
         backgroundColor: '#f5f5f5',
+        maxWidth: 2400,
+        minHeight: '100vh', // Ensure the container takes up the full height of the viewport
+        paddingBottom: '80px', // Space for the loader at the bottom
       }}
     >
-      {articles.length > 0 ? (
-        articles.map((article) => (
-          <ArticleCard
-            key={article.slug}
-            image={article.author.image}
-            title={article.title}
-            author={article.author.username}
-            description={article.description}
-            favorited={article.favorited}
-            favoritesCount={article.favoritesCount}
-          />
-        ))
-      ) : (
-        <Typography>No articles available</Typography>
-      )}
+      <Box
+        sx={{
+          marginLeft:20,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 4,
+          padding: 2,
+          flexDirection: 'row',
+          width: '100%',
+          maxWidth: 2400, // Constrain width to a max value
+          '@media (max-width: 800px)': {
+            flexDirection: 'row',
+           alignItems: 'center', // Center items in column layout
+          },
+        }}
+      >
+        {articles.length > 0 ? (
+          articles.map((article) => (
+            <ArticleCard
+              key={article.slug}
+              image={article.author.image}
+              title={article.title}
+              author={article.author.username}
+              description={article.description}
+              favorited={article.favorited}
+              favoritesCount={article.favoritesCount}
+              createdAt = {article.createdAt}
+            />
+          ))
+        ) : (
+          <Typography>No articles available</Typography>
+        )}
+      </Box>
+      
+      {/* Loader positioned at the bottom */}
       {currentStatus === 'loading' && hasMore && (
         <Box
           sx={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
             display: 'flex',
             justifyContent: 'center',
             padding: 2,
+            backgroundColor: '#f5f5f5', // Match the background color to avoid visual breaks
           }}
         >
           <CircularProgress />
