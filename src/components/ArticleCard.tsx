@@ -5,6 +5,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { formatDistanceToNow } from 'date-fns';
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import AllArticleData from './AllArticleData';
+import Popup from 'reactjs-popup';
+
+
 
 interface ArticleCardProps {
   image: string;
@@ -34,17 +37,17 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     setIsFavorited(prev => !prev);
   };
 
-  const showingDetails = () => {
-      <AllArticleData/>
-  }
+  const [isOpen1, setIsOpen1] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen1);
+  };
 
 
   return (
-  <div onClick={showingDetails} style={{ cursor: 'pointer'}}>
     <Card
       sx={{
         width: { xs: '100%', sm: '250px', md: '300px' },
-        height: 'auto',
         boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
         borderRadius: 2,
         display: 'flex',
@@ -54,9 +57,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         backgroundColor: 'snow',
         border: '1px solid #ddd',
         minWidth: 380,
+        maxHeight: 450,
       }}
     >
-      <Box
+      <Box 
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -71,6 +75,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           />
         </Stack>
         <Box>
+          <div
+           onClick={togglePopup }
+           style={{ cursor: 'pointer'}}
+           >
           <Typography
             sx={{
               overflow: 'hidden',
@@ -79,13 +87,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
               WebkitLineClamp: 1,
               WebkitBoxOrient: 'vertical',
               marginRight: 16,
-              marginTop: 2,
+              marginTop: 0.5,
               fontVariant: 'contextual',
               textDecorationStyle: 'solid',
             }}
           >
             {author}
           </Typography>
+          </div>
           <Typography
             sx={{
               color: 'text.secondary',
@@ -142,41 +151,34 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       </CardContent>
 
       <CardActions
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          padding: 1,
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <FormatListNumberedOutlinedIcon color='action' fontSize='medium'/>
-         
-
-<div onClick={handleClick} style={{ cursor: 'pointer' }}>
-      {isFavorited ? (
-        <FavoriteIcon
-          sx={{
-            padding: 1,
-          }}
-          color='success'
-          fontSize='medium'
-        />
-      ) : (
-        <FavoriteBorderIcon
-          color='disabled'
-          fontSize='medium'
-        />
-      )}
-    </div>
-          
-        </Box>
-      </CardActions>
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: 1,
+        // width: '100%', // Ensure it takes the full width
+        maxWidth: '500px', // Optional: limit the maximum width
+      }}
+    >
+      <FormatListNumberedOutlinedIcon color='action' fontSize='medium'/>
+      
+      <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+        {isFavorited ? (
+          <FavoriteIcon
+            sx={{
+              // padding: 3,
+              // marginRight: 2,
+            }}
+            color='warning'
+            fontSize='medium'
+          />
+        ) : (
+          <FavoriteBorderIcon
+            color='disabled'
+            fontSize='medium'
+          />
+        )}
+      </div>
+    </CardActions>
 
       {isOpen && (
         <Box
@@ -210,7 +212,6 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         </Box>
       )}
     </Card>
-    </div>
   );
 };
 
