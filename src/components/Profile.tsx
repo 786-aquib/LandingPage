@@ -6,21 +6,22 @@ import ArticleList from './ArticleList';
 
 function Profile() {
   return (
-    <div>
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 0.5 // Optional: Add padding for spacing
-      }}
-    >
-      <WebsiteName />
-      <AvatarDemo />
-      
-    </Box>
-  <ArticleList/>
-</div>
+    <div style={{ overflow: 'hidden', margin: 0, padding: 0 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 0.5, // Optional: Add padding for spacing
+          overflow: 'hidden', // Ensure no overflow
+          width: '100%', // Ensure Box takes full width
+        }}
+      >
+        <WebsiteName />
+        <AvatarDemo />
+      </Box>
+      <ArticleList />
+    </div>
   );
 }
 
