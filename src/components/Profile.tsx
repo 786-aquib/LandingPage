@@ -12,9 +12,10 @@ function Profile() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 0.5, // Optional: Add padding for spacing
+          padding: 0.5, // Optional: Add padding for spacing                   
           overflow: 'hidden', // Ensure no overflow
-          width: '100%', // Ensure Box takes full width
+          width: '100%', // Ensure Box takes full width     
+          bgcolor: 'aliceblue'                            
         }}
       >
         <WebsiteName />

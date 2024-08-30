@@ -34,6 +34,7 @@ const initialState: ArticlesState = {
   offset: 0,
 };
 
+// Async thunk for fetching articles
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
   async (offset: number) => {
@@ -54,10 +55,37 @@ export const fetchArticles = createAsyncThunk(
   }
 );
 
+// Async thunk for favoriting an article
+export const favoriteArticle = createAsyncThunk(
+  'articles/favoriteArticle',
+  async (slug: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://api.realworld.io/api/articles/${slug}/favorite`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.article; // Assuming the response contains the updated article
+    } catch (error) {
+      return rejectWithValue('Error');
+    }
+  }
+);
+
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
-  reducers: {},
+  reducers: {
+    // Optional: Add any synchronous reducers here
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchArticles.pending, (state) => {
@@ -72,6 +100,21 @@ const articlesSlice = createSlice({
       .addCase(fetchArticles.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch articles';
+      })
+      .addCase(favoriteArticle.pending, (state) => {
+        // Optionally, handle the pending state for the favorite action
+      })
+      .addCase(favoriteArticle.fulfilled, (state, action) => {
+        // Update the article in the state with the new favorited status
+        const updatedArticle = action.payload;
+        const index = state.articles.findIndex(article => article.slug === updatedArticle.slug);
+        if (index !== -1) {
+          state.articles[index] = updatedArticle;
+        }
+      })
+      .addCase(favoriteArticle.rejected, (state, action) => {
+        // Handle errors for the favorite action
+        state.error = action.payload as string;
       });
   },
 });

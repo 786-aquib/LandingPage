@@ -69,7 +69,6 @@ const ArticleList: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
         maxWidth: 2400,
         minHeight: '100vh', // Ensure the container takes up the full height of the viewport
         paddingBottom: '80px', // Space for the loader at the bottom
@@ -84,6 +83,7 @@ const ArticleList: React.FC = () => {
           padding: 2,
           flexDirection: 'row',
           width: '100%',
+          bgcolor: 'aliceblue',
           maxWidth: 2400, // Constrain width to a max value
           '@media (max-width: 800px)': {
             flexDirection: 'row',
@@ -94,7 +94,7 @@ const ArticleList: React.FC = () => {
         {articles.length > 0 ? (
           articles.map((article) => (
             <ArticleCard
-              key={article.slug}
+              slug={article.slug}
               image={article.author.image}
               title={article.title}
               author={article.author.username}
@@ -102,12 +102,15 @@ const ArticleList: React.FC = () => {
               favorited={article.favorited}
               favoritesCount={article.favoritesCount}
               createdAt = {article.createdAt}
+              taglist = {article.tagList}
             />
           ))
         ) : (
           <Typography>No articles available</Typography>
         )}
       </Box>
+      
+
       
       {/* Loader positioned at the bottom */}
       {currentStatus === 'loading' && hasMore && (

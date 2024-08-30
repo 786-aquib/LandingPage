@@ -7,9 +7,10 @@ import Home from './components/Profile';
 import ArticlesList from './components/ArticleList';
 import ArticleCardWrapper from './components/ArticleCardWrapper';
 import Profile from './components/Profile';
+import AllArticleData from './components/AllArticleData';
 import './styles/global.css'
 
-const App: React.FC = () => {
+const App: React.FC = () => {       
   return (
     <Router>
       <Routes>
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route path="/Profile" element={<Profile />} />
         <Route path="/articles" element={<ArticlesList />} />
         <Route path="/article-card" element={<ArticleCardWrapper />} />
+        <Route path = '/AllArticleData' element = {<AllArticleData/>} />
       </Routes>
     </Router>
   );

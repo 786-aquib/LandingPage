@@ -3,13 +3,11 @@ import { Card, CardActions, CardContent, CardMedia, Typography, Button, Box, Ava
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { formatDistanceToNow } from 'date-fns';
-import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
-import AllArticleData from './AllArticleData';
-import Popup from 'reactjs-popup';
-
-
+import Chip from '@mui/material/Chip';
+import { useNavigate } from 'react-router-dom';
 
 interface ArticleCardProps {
+  slug : string;
   image: string;
   title: string;
   author: string;
@@ -17,9 +15,11 @@ interface ArticleCardProps {
   favorited: boolean;
   favoritesCount: number;
   createdAt: string;
+  taglist: string[];
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({
+  slug,
   image,
   title,
   author,
@@ -27,22 +27,28 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   favorited,
   favoritesCount,
   createdAt,
+  taglist
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [isFavorited, setIsFavorited] = useState(favorited);
 
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  // Handler to toggle the favorited state
   const handleClick = () => {
     setIsFavorited(prev => !prev);
   };
 
-  const [isOpen1, setIsOpen1] = useState(false);
-
-  const togglePopup = () => {
-    setIsOpen(!isOpen1);
+  const handleViewDetails = () => {
+    navigate('/AllArticleData', { state: { 
+      slug,
+      image, 
+      title, 
+      author, 
+      description, 
+      favorited: isFavorited, 
+      favoritesCount, 
+      createdAt, 
+      taglist 
+    } });
   };
-
 
   return (
     <Card
@@ -54,10 +60,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
-        backgroundColor: 'snow',
         border: '1px solid #ddd',
-        minWidth: 380,
-        maxHeight: 450,
+        minWidth: 500,
+        minHeight: 450,
+        bgcolor: 'whitesmoke'
       }}
     >
       <Box 
@@ -75,25 +81,22 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           />
         </Stack>
         <Box>
-          <div
-           onClick={togglePopup }
-           style={{ cursor: 'pointer'}}
-           >
-          <Typography
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-              marginRight: 16,
-              marginTop: 0.5,
-              fontVariant: 'contextual',
-              textDecorationStyle: 'solid',
-            }}
-          >
-            {author}
-          </Typography>
+          <div onClick={handleViewDetails} style={{ cursor: 'pointer' }}>
+            <Typography
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: 'vertical',
+                marginRight: 16,
+                marginTop: 0.5,
+                fontVariant: 'contextual',
+                textDecorationStyle: 'solid',
+              }}
+            >
+              {author}
+            </Typography>
           </div>
           <Typography
             sx={{
@@ -115,24 +118,27 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           padding: 1,
         }}
       >
-        <Typography
-          variant="h6"
-          component="div"
-          gutterBottom
-          sx={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            fontSize: '1rem',
-            marginBottom: 0.5,
-            textDecorationColor: 'ThreeDDarkShadow',
-            textDecorationStyle: 'dashed',
-          }}
-        >
-          {title}
-        </Typography>
+        <Box>
+          <div onClick={handleViewDetails} style={{ cursor: 'pointer' }}>
+            <Typography
+              variant="h6"
+              component="div"
+              gutterBottom
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                fontSize: '1rem',
+                marginBottom: 0.5,
+                marginLeft: 2,
+              }}
+            >
+              {title}
+            </Typography>
+          </div>
+        </Box>
         <Typography
           variant="body2"
           color="text.secondary"
@@ -144,6 +150,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             WebkitBoxOrient: 'vertical',
             fontSize: '0.875rem',
             marginBottom: 1,
+            marginLeft: 2,
           }}
         >
           {description}
@@ -151,66 +158,27 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       </CardContent>
 
       <CardActions
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: 1,
-        // width: '100%', // Ensure it takes the full width
-        maxWidth: '500px', // Optional: limit the maximum width
-      }}
-    >
-      <FormatListNumberedOutlinedIcon color='action' fontSize='medium'/>
-      
-      <div onClick={handleClick} style={{ cursor: 'pointer' }}>
-        {isFavorited ? (
-          <FavoriteIcon
-            sx={{
-              // padding: 3,
-              // marginRight: 2,
-            }}
-            color='warning'
-            fontSize='medium'
-          />
-        ) : (
-          <FavoriteBorderIcon
-            color='disabled'
-            fontSize='medium'
-          />
-        )}
-      </div>
-    </CardActions>
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: 1,
+          maxWidth: '500px',
+        }}
+      >
+        <Stack direction="row" spacing={1}>
+          {taglist.map((tag, index) => (
+            <Chip key={index} label={tag} variant={index % 2 === 0 ? 'filled' : 'outlined'} />
+          ))}
+        </Stack>
 
-      {isOpen && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <Box
-            sx={{
-              backgroundColor: '#FFEBCD',
-              padding: 4,
-              borderRadius: 3,
-              boxShadow: 3,
-              width: '90%',
-              maxWidth: '500px',
-            }}
-          >
-            <Typography variant="h6" gutterBottom>Details</Typography>
-            {/* Add more details or content here */}
-            <Button onClick={() => setIsOpen(false)} variant="contained" color="primary">Close</Button>
-          </Box>
-        </Box>
-      )}
+        <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+          {isFavorited ? (
+            <FavoriteIcon color='warning' fontSize='medium' />
+          ) : (
+            <FavoriteBorderIcon color='disabled' fontSize='medium' />
+          )}
+        </div>
+      </CardActions>
     </Card>
   );
 };
