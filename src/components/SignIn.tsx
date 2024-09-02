@@ -14,6 +14,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { tokenToString } from 'typescript';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -53,6 +54,8 @@ export default function SignIn() {
         }),
       });
 
+    //  https://api.realworld.io//api/articles/:slug/favorite
+
       if (response.ok) {
         const result = await response.json();
         let successMessage = "Sign-In Successful!";
@@ -62,6 +65,7 @@ export default function SignIn() {
 
         console.log('Sign in successful:', result);
         localStorage.setItem('token', result.user.token);
+        console.log("token : 2" + result.user.token);
 
         navigate("/Home");
       } else {
@@ -159,7 +163,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               disabled={loading} // Disable button when loading
-            >
+            > 
               Sign In
             </Button>
             <Grid container>

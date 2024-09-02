@@ -1,10 +1,13 @@
 import { Avatar, Box } from '@mui/material';
-import React from 'react';
 import WebsiteName from './WebsiteName';
 import AvatarDemo from './Avatar';
 import ArticleList from './ArticleList';
+import { request } from 'http';
 
 function Profile() {
+
+  const token2 =  localStorage.getItem('token');
+   console.log("token : 2" + token2);
   return (
     <div style={{ overflow: 'hidden', margin: 0, padding: 0 }}>
       <Box

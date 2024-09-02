@@ -56,15 +56,22 @@ export const fetchArticles = createAsyncThunk(
 );
 
 // Async thunk for favoriting an article
+// In articleSlice.ts
 export const favoriteArticle = createAsyncThunk(
   'articles/favoriteArticle',
   async (slug: string, { rejectWithValue }) => {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+    if (!token) {
+      return rejectWithValue('No token found');
+    }
+    
     try {
       const response = await fetch(`https://api.realworld.io/api/articles/${slug}/favorite`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`, // Include the token in the Authorization header
         },
       });
 
@@ -79,6 +86,7 @@ export const favoriteArticle = createAsyncThunk(
     }
   }
 );
+
 
 const articlesSlice = createSlice({
   name: 'articles',

@@ -37,7 +37,7 @@ export default function SignUp() {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
+  
   const onSubmit: SubmitHandler<ISignUpForm> = async (data) => {
     try {
       const response = await fetch('https://api.realworld.io/api/users', {
