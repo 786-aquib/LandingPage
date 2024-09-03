@@ -114,9 +114,15 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             >
               {author}
             </Typography>
-            <div onClick={handleFollow}>
+            <div onClick={handleFollow} style={{ cursor: 'pointer' }}>
               { followArticle ? (
-                <CheckBoxIcon color='success' fontSize='medium'/>
+                <div
+                  style={{
+                       marginTop: 6,
+                       fontSize: '1.1rem',
+                       lineHeight: 1.2,
+                  }}
+                > Followed </div>
               ) : (
                 <div style={{display:'flex', flexDirection: 'row'}}>
               <AddIcon  style = {{ marginTop: 2.5}}color="action" fontSize="medium"/>
