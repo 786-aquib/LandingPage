@@ -1,4 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './store'; // Adjust the import path
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 interface Article {
   slug: string;
@@ -33,7 +37,7 @@ const initialState: ArticlesState = {
   hasMore: true,
   offset: 0,
 };
-
+  
 // Async thunk for fetching articles
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
@@ -60,7 +64,7 @@ export const fetchArticles = createAsyncThunk(
 export const favoriteArticle = createAsyncThunk(
   'articles/favoriteArticle',
   async (slug: string, { rejectWithValue }) => {
-    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
     if (!token) {
       return rejectWithValue('No token found');
     }
@@ -71,7 +75,7 @@ export const favoriteArticle = createAsyncThunk(
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`, // Include the token in the Authorization header
+          'Authorization': `Token ${token}`,
         },
       });
 
@@ -80,12 +84,48 @@ export const favoriteArticle = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log(data);
       return data.article; // Assuming the response contains the updated article
     } catch (error) {
       return rejectWithValue('Error');
     }
   }
 );
+
+
+
+export const followUser = createAsyncThunk(
+  'users/followUser',
+  async (username: any, { rejectWithValue }) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return rejectWithValue('No token found');
+    }
+
+    try {
+      const response = await fetch(`https://api.realworld.io/api/profiles/${username}/follow`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Error following user');
+      }
+
+      const data = await response.json();
+      return data.profile; // Adjust if needed
+    } catch (error) {
+      return rejectWithValue('Error following user');
+    }
+  }
+);
+
+
 
 
 const articlesSlice = createSlice({
@@ -122,6 +162,21 @@ const articlesSlice = createSlice({
       })
       .addCase(favoriteArticle.rejected, (state, action) => {
         // Handle errors for the favorite action
+        state.error = action.payload as string;
+      })
+      .addCase(followUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.status = 'idle';
+        const updatedArticle = action.payload;
+        const index = state.articles.findIndex(article => article.author === updatedArticle.author);
+        if (index !== -1) {
+          state.articles[index] = updatedArticle;
+        }
+      })
+      .addCase(followUser.rejected, (state, action) => {
+        state.status = 'failed';
         state.error = action.payload as string;
       });
   },

@@ -17,7 +17,7 @@ const ArticleList: React.FC = () => {
   }, [dispatch, currentStatus, hasMore, offset]);
 
   useEffect(() => {
-    fetchMoreArticles();
+    fetchMoreArticles();                    
   }, []);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const ArticleList: React.FC = () => {
     >
       <Box
         sx={{
-          marginLeft:20,
+          marginLeft:50,
           display: 'flex',
           flexWrap: 'wrap',
           gap: 4,
@@ -103,6 +103,7 @@ const ArticleList: React.FC = () => {
               favoritesCount={article.favoritesCount}
               createdAt = {article.createdAt}
               taglist = {article.tagList}
+              follow = {article.author.following}
             />
           ))
         ) : (
@@ -134,3 +135,4 @@ const ArticleList: React.FC = () => {
 };
 
 export default ArticleList;
+           

@@ -16,10 +16,11 @@ const ArticleCardWrapper: React.FC = () => {
     taglist: 
       [
         "ipsum",
-        "voluptatem",
+        "voluptatem",           
         "fugit",
         "magnam"
     ],
+    follow: false,
   };
 
   return <ArticleCard {...sampleArticle} />;
