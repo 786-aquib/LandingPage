@@ -23,20 +23,21 @@ function AllArticleData() {
   const handleFollowInAllArticle = () => {
       setIsFollowed(!isFollowed);
   }
-
+                             
   if (!article) {
     return <div>No article data available</div>;
   }
 
   return (
     <Box
-      sx={{
+      sx={{                     
         display: 'flex',
         justifyContent: 'center',
+        minWidth: 700,
         height: '100vh',
         bgcolor: 'aliceblue',
         padding: 2,
-        overflow: 'hidden',
+        // overflow: 'hidden',
       }}
     >
       <Card
@@ -52,7 +53,7 @@ function AllArticleData() {
           marginBottom: 10,
           bgcolor: 'aliceblue',
           width: '100%',
-          maxWidth: 750,
+          minWidth: 550,
           padding: 3,
           overflowY: 'hidden',
 
@@ -89,14 +90,14 @@ function AllArticleData() {
             </Stack>
           )}
         </Box>
-        
+                      
         <Box                    
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
             textAlign: 'left',
-          }}
+          }}            
         >
           <Typography variant="h6" sx={{ mb: 2 }} color={grey}>
             {article.title}
@@ -104,29 +105,25 @@ function AllArticleData() {
           <Typography sx={{ mb: 2 }}>
             {article.description}
           </Typography>
-          <Typography color="text.secondary">
+          <Typography color="text.secondary">        
             {article.slug}
-          </Typography>
+          </Typography>         
         </Box>
-
-        <Box sx={{ marginTop: 5 }}>
-          <AddComment slug={article.slug} />
-        </Box>
-
-        <CardActions
+                                              
+        <CardActions                
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            padding: 1.5,
+            padding: 1.5,                      
             marginTop: 4,
-          }}
+          }}   
         >
           <Stack direction="row" spacing={2} fontSize={4}>
             {article.tagList.map((tag, index) => (
               <Chip key={index} label={tag} variant={index % 1 === 0 ? 'filled' : 'outlined'} size="medium" />
             ))}
           </Stack>
-
+         
           <Box>
             {article.favorited ? (
               <FavoriteIcon color="warning" fontSize='large' />
@@ -134,10 +131,14 @@ function AllArticleData() {
               <FavoriteBorderIcon color="disabled" fontSize='large' />
             )}
           </Box>
-        </CardActions>
-      </Card>
+        </CardActions>    
+      </Card>   
+      <Box sx={{ marginTop: 5,  minWidth: 200}}>
+          <AddComment slug={article.slug} />
+        </Box>
     </Box>
   );
-}
+}     
 
 export default AllArticleData;
+                                      
