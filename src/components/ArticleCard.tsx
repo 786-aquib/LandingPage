@@ -6,63 +6,53 @@ import AddIcon from '@mui/icons-material/Add';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { favoriteArticle } from '../redux/articleSlice';
-import { AppDispatch } from '../redux/store';            
-import  {followUser}  from '../redux/articleSlice';   
-import { UnfollowUser } from '../redux/articleSlice'; 
-import { error } from 'console';     
+import { favoriteArticle, followUser, UnfollowUser } from '../redux/articleSlice';
+import { AppDispatch } from '../redux/store';
 
-                                                        
-      
-interface ArticleCardProps {      
+interface ArticleCardProps {
   slug: string;
-  image: string;                                        
-  title: string;           
-  author: string;                                       
+  image: string;
+  title: string;
+  author: string;
   description: string;
-  favorited: boolean;   
-  favoritesCount: number;   
-  createdAt: string;                                    
-  taglist: string[];  
-  follow : boolean;
-}                                                       
-                                                                        
+  favorited: boolean;
+  favoritesCount: number;
+  createdAt: string;
+  taglist: string[];
+  follow: boolean;
+}
+
 const ArticleCard: React.FC<ArticleCardProps> = ({
-  slug,   
+  slug,
   image,
-  title,                                                 
-  author,  
+  title,
+  author,
   description,
   favorited,
-  favoritesCount,   
-  createdAt,          
-  taglist,                                         
+  favoritesCount,
+  createdAt,
+  taglist,
   follow,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [isFavorited, setIsFavorited] = useState(favorited);
-  const [isfollow, setIsfollow] = useState(false);
+  const [isFollow, setIsFollow] = useState(follow);
 
   const handleClick = () => {
     dispatch(favoriteArticle(slug));
-    setIsFavorited(!isFavorited);     
+    setIsFavorited(!isFavorited);
   };
 
   const handleFollow = () => {
-    const username = author;    
-    console.log("username ==> ",username)
-    dispatch(followUser(username));     
-    setIsfollow(!isfollow);
-  };
-  
-  const handleUnFollow = () => {
-    const username = author;    
-    console.log("username ==> ",username)
-    dispatch(UnfollowUser(username));     
-    setIsfollow(!isfollow);
+    dispatch(followUser(author));
+    setIsFollow(true);
   };
 
+  const handleUnfollow = () => {
+    dispatch(UnfollowUser(author));
+    setIsFollow(false);
+  };
 
   const handleViewDetails = () => {
     navigate('/AllArticleData', {
@@ -72,38 +62,39 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         title,
         author,
         description,
-        favorited: isFavorited,  
+        favorited: isFavorited,
         favoritesCount,
         createdAt,
         taglist,
-        follow,
+        follow: isFollow,
       },
     });
   };
-                                                
+
   return (
-    <Card    
+    <Card
       sx={{
-        width: { xs: '100%', sm: '250px', md: '300px' },
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',        
+        width: '100%',
+        maxWidth: 600, 
+        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
         borderRadius: 2,
-        display: 'flex',                            
+        display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
         border: '1px solid #ddd',
-        minWidth: 700,      
-        minHeight: 200,
         bgcolor: 'whitesmoke',
+        mx: 'auto',
+        minHeight: 200,
       }}
-    >          
+    >
       <Box
         sx={{
-          display: 'flex',             
-          justifyContent: 'space-between',             
-          alignItems: 'center',                                  
-          padding: 1.5, 
-        }}                   
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 1.5,
+        }}
       >
         <Stack direction="row" spacing={1.5} sx={{ flex: 1 }}>
           <Avatar alt="Author" src={image} sx={{ width: 50, height: 50 }} />
@@ -111,82 +102,85 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             <Typography
               onClick={handleViewDetails}
               sx={{
-                cursor: 'pointer',       
+                cursor: 'pointer',
                 fontSize: '1rem',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
-                WebkitLineClamp: 1,                     
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: 'vertical',
                 lineHeight: 1.2,
                 marginTop: 0.5,
-                marginLeft: 1,           
-              }}                                                 
+                marginLeft: 1,
+              }}
             >
               {author}
-            </Typography>          
-            <Typography  
-              sx={{                                                                   
+            </Typography>
+            <Typography
+              sx={{
                 color: 'text.secondary',
                 fontSize: '0.75rem',
-                marginLeft: 1,                   
-              }}                                                                                          
+                marginLeft: 1,
+              }}
             >
               {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
-            </Typography>             
+            </Typography>
           </Box>
-        </Stack>                                                            
+        </Stack>
         <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          {isfollow ? (
-            <Typography sx={{ fontSize: '1rem', color: '#670a8e' }} onClick={()=>handleUnFollow()}>Following</Typography>
+          {isFollow ? (
+            <Typography sx={{ fontSize: '1rem', color: '#670a8e' }} onClick={handleUnfollow}>
+              Following
+            </Typography>
           ) : (
             <Stack direction="row" spacing={0.2} alignItems="center">
-              <AddIcon color='success' fontSize="small" />
-              <Typography sx={{ fontSize: '1rem', color: 'green' }} onClick={()=>handleFollow()}>Follow</Typography>
+              <AddIcon color="success" fontSize="small" />
+              <Typography sx={{ fontSize: '1rem', color: 'green' }} onClick={handleFollow}>
+                Follow
+              </Typography>
             </Stack>
           )}
-        </Box>       
+        </Box>
       </Box>
-      <CardContent      
-  sx={{
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 1,    
-  }}
->
-  <Box onClick={handleViewDetails} sx={{ cursor: 'pointer' }}>
-    <Typography
-      variant="body2"
-      color="ActiveCaption"
-      sx={{
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
+      <CardContent
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 1,
+        }}
+      >
+        <Box onClick={handleViewDetails} sx={{ cursor: 'pointer' }}>
+          <Typography
+            variant="body2"
+            color="ActiveCaption"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: '0.875rem',
+              marginBottom: 2,
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
 
-        fontSize: '0.875rem',
-        marginBottom: 2, // Reduced margin-bottom to bring title closer to description
-      }}
-    >
-      {title}
-    </Typography>
-  </Box>
-        
-  <Typography
-    variant="body2"
-    color="text.secondary"
-    sx={{
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      display: '-webkit-box',
-      WebkitLineClamp: 2,
-      WebkitBoxOrient: 'vertical',
-      fontSize: '0.75rem',
-      marginBottom: 0.5, // Small margin-bottom to ensure consistent spacing
-    }}
-  >
-    {description}                
-  </Typography>
-</CardContent>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            fontSize: '0.75rem',
+            marginBottom: 0.5,
+          }}
+        >
+          {description}
+        </Typography>
+      </CardContent>
 
       <CardActions
         sx={{
@@ -209,8 +203,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           )}
         </Box>
       </CardActions>
-    </Card> 
+    </Card>
   );
-};   
-    
-export default ArticleCard;
+};
+
+export default ArticleCard;                  

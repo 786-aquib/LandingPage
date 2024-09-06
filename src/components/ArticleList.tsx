@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography, Grid } from '@mui/material';
 import ArticleCard from './ArticleCard';
 import { RootState, AppDispatch } from '../redux/store';
 import { fetchArticles } from '../redux/articleSlice';
@@ -17,8 +17,8 @@ const ArticleList: React.FC = () => {
   }, [dispatch, currentStatus, hasMore, offset]);
 
   useEffect(() => {
-    fetchMoreArticles();                    
-  }, []);
+    fetchMoreArticles();
+  }, [fetchMoreArticles]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,7 +61,7 @@ const ArticleList: React.FC = () => {
       </Box>
     );
   }
-     
+
   return (
     <Box
       sx={{
@@ -69,50 +69,42 @@ const ArticleList: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        maxWidth: 2400,
-        minHeight: '100vh', // Ensure the container takes up the full height of the viewport
-        paddingBottom: '80px', // Space for the loader at the bottom
+        minHeight: '100vh',
+        paddingBottom: '80px',
+        px: { xs: 2, sm: 3, md: 4 }, // Responsive padding
       }}
     >
-      <Box
+      <Grid
+        container
+        spacing={4} // Space between grid items
         sx={{
-          marginLeft:50,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 4,
-          padding: 2,
-          flexDirection: 'row',
-          width: '100%',
-          bgcolor: 'aliceblue',
-          maxWidth: 2400, // Constrain width to a max value
-          '@media (max-width: 800px)': {
-            flexDirection: 'row',
-           alignItems: 'center', // Center items in column layout
-          },
+          maxWidth: { xs: '100%', sm: 1200, md: 1400 }, // Max width of the container
         }}
       >
         {articles.length > 0 ? (
           articles.map((article) => (
-            <ArticleCard
-              slug={article.slug}
-              image={article.author.image}
-              title={article.title}
-              author={article.author.username}
-              description={article.description}
-              favorited={article.favorited}
-              favoritesCount={article.favoritesCount}
-              createdAt = {article.createdAt}
-              taglist = {article.tagList}
-              follow = {article.author.following}
-            />
+            <Grid item xs={12} sm={6} key={article.slug}>
+              <ArticleCard
+                slug={article.slug}
+                image={article.author.image}
+                title={article.title}
+                author={article.author.username}
+                description={article.description}
+                favorited={article.favorited}
+                favoritesCount={article.favoritesCount}
+                createdAt={article.createdAt}
+                taglist={article.tagList}
+                follow={article.author.following}
+              />
+            </Grid>
           ))
         ) : (
-          <Typography>No articles available</Typography>
+          <Grid item xs={12}>
+            <Typography>No articles available</Typography>
+          </Grid>
         )}
-      </Box>
-      
+      </Grid>
 
-      
       {/* Loader positioned at the bottom */}
       {currentStatus === 'loading' && hasMore && (
         <Box
@@ -124,7 +116,7 @@ const ArticleList: React.FC = () => {
             display: 'flex',
             justifyContent: 'center',
             padding: 2,
-            backgroundColor: '#f5f5f5', // Match the background color to avoid visual breaks
+            backgroundColor: '#f5f5f5',
           }}
         >
           <CircularProgress />
@@ -135,4 +127,3 @@ const ArticleList: React.FC = () => {
 };
 
 export default ArticleList;
-           

@@ -11,19 +11,16 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddComment from './AddComment';
 import { grey } from '@mui/material/colors';
 
-function AllArticleData() {
+function AllArticleData() {          
   const location = useLocation();
 
   const { slug, FollowArticle } = location.state as { slug: string, FollowArticle: boolean }; // Receive slug and FollowArticle
   const [isFollowed, setIsFollowed] = useState(FollowArticle);
+  console.log(isFollowed);
 
   const articles = useSelector((state: RootState) => state.articles.articles);
   const article = articles.find(a => a.slug === slug);
 
-  const handleFollowInAllArticle = () => {
-
-      setIsFollowed(!isFollowed);
-  }
                              
   if (!article) {
     return <div>No article data available</div>;
@@ -33,9 +30,9 @@ function AllArticleData() {
     <Box
       sx={{                     
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'center',                           
         minWidth: 700,
-        height: '100vh',
+        height: '100vh',           
         bgcolor: 'aliceblue',
         padding: 2,
         overflowY: 'hidden',
@@ -44,15 +41,12 @@ function AllArticleData() {
     >
       <Card
         sx={{
-          // boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-          // borderRadius: 2,
           display: 'flex',
           flexDirection: 'column',
-          // border: '1px solid #ddd',
           marginLeft: 10,
           marginRight: 10,
           marginTop: 5,
-          marginBottom: 10,
+          marginBottom: 10,                               
           bgcolor: 'aliceblue',
           width: '100%',
           minWidth: 550,
@@ -82,8 +76,8 @@ function AllArticleData() {
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', mb: 3 }} onClick={handleFollowInAllArticle}>
-          {isFollowed ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', cursor: 'pointer', mb: 3 }}>
+          {(article.author.following) ? (
             <Typography sx={{ fontSize: '1.2rem', color: '#670a8e' }}>Following</Typography>
           ) : (
             <Stack direction="row" spacing={0.5} alignItems="center">
@@ -93,10 +87,10 @@ function AllArticleData() {
           )}
         </Box>                    
                       
-        <Box                       
+        <Box                                  
           sx={{           
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'column',   
             alignItems: 'flex-start',
             textAlign: 'left',
           }}            

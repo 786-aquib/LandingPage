@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import axios from 'axios';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 interface Comment {
   id: number;
@@ -9,11 +8,13 @@ interface Comment {
   createdAt: string;
   updatedAt: string;
   author: {
-    username: string;          
+    username: string; 
+    bio: string;         
     image: string;
+    following: boolean;
   };
-}
-
+} 
+ 
 const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentTxt, setCommentTxt] = useState<string>("");
@@ -24,13 +25,12 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
         const response = await axios.get(
           `https://api.realworld.io/api/articles/${slug}/comments`
         );   
-        console.log("Fetched comments:", response.data); // Log the response data
+        console.log("Fetched comments:", response.data);
         setComments(response.data.comments);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }                
     };
-                
     fetchComments();
   }, [slug]);
          
@@ -38,13 +38,11 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
     if (commentTxt.trim()) {   
       try {
         const token = localStorage.getItem('token');
-
         if (!token) {
           console.error("Authentication token doesn't exist!");
           return;
         }
-
-        console.log("Sending comment with token:", token); // Log the token
+        console.log("Sending comment with token:", token);
 
         const response = await axios.post(
           `https://api.realworld.io/api/articles/${slug}/comments`,  
@@ -59,7 +57,6 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
             },
           }
         );
-
         console.log("Comment sent:", response.data);
         setComments((prevComments) => [ ...prevComments, response.data.comment]);
         setCommentTxt("");
@@ -67,21 +64,17 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
         console.error("Error sending comment:", error);
       }
     }   
-  };
-
-  const DeleteArticle = async (slug: string, id: number) => {
+  };        
+  const DeleteComment = async (slug: string, id: number) => {
     try {
       const token = localStorage.getItem('token');
-  
       if (!token) {
         console.error("Authentication token doesn't exist!");
         return;
       }
-      console.log("Slug : ", slug);
-      console.log("ID:", id);
-      console.log("Sending comment with token:", token); // Log the token
-
-  
+      console.log("Slug: ", slug);
+      console.log("ID: ", id);
+      console.log("Sending comment with token: ", token);
       await axios.delete(
         `https://api.realworld.io/api/articles/${slug}/comments/${id}`,
         {
@@ -89,15 +82,12 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
             'Authorization': `Token ${token}`,
           },
         }
-      );
-      // Update the state to remove the deleted comment
+      );                                                                                       
       setComments((prevComments) => prevComments.filter(comment => comment.id !== id));
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
   };
-  
-
   return (
     <Box
     sx={{
@@ -140,7 +130,7 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
                 {comment.author.username}
                   </Typography>
                   <Button
-                   onClick={() => DeleteArticle(slug, comment.id)}
+                   onClick={() => DeleteComment(slug, comment.id)}
                    variant='text'
                    sx={{ marginLeft: 40 }}
                    >
