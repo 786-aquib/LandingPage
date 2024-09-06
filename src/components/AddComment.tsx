@@ -9,7 +9,7 @@ interface Comment {
   createdAt: string;
   updatedAt: string;
   author: {
-    username: string;
+    username: string;          
     image: string;
   };
 }
@@ -23,19 +23,19 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
       try {
         const response = await axios.get(
           `https://api.realworld.io/api/articles/${slug}/comments`
-        );
+        );   
         console.log("Fetched comments:", response.data); // Log the response data
         setComments(response.data.comments);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }                
     };
-
+                
     fetchComments();
   }, [slug]);
-
+         
   const handleSend = async () => {
-    if (commentTxt.trim()) {
+    if (commentTxt.trim()) {   
       try {
         const token = localStorage.getItem('token');
 
@@ -54,7 +54,7 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
             },    
           },
           {
-            headers: {
+            headers: {  
               'Authorization': `Token ${token}`,
             },
           }
@@ -69,18 +69,45 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
     }   
   };
 
+  const DeleteArticle = async (slug: string, id: number) => {
+    try {
+      const token = localStorage.getItem('token');
+  
+      if (!token) {
+        console.error("Authentication token doesn't exist!");
+        return;
+      }
+      console.log("Slug : ", slug);
+      console.log("ID:", id);
+      console.log("Sending comment with token:", token); // Log the token
+
+  
+      await axios.delete(
+        `https://api.realworld.io/api/articles/${slug}/comments/${id}`,
+        {
+          headers: {
+            'Authorization': `Token ${token}`,
+          },
+        }
+      );
+      // Update the state to remove the deleted comment
+      setComments((prevComments) => prevComments.filter(comment => comment.id !== id));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+  
+
   return (
     <Box
     sx={{
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column',  
       p: 2,
-      height: '700px', // Set the fixed height for the comments section
-      maxHeight: '700px',
-      overflowY: 'auto', // Enable vertical scrolling
+      height: '700px', 
+      maxHeight: '700px',             
+      overflowY: 'auto',
       bgcolor: 'whitesmoke',
-      // borderRadius: 2,
-      // boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
       marginTop: 10,
     }}
   >
@@ -103,15 +130,33 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
                 alt={comment.author.username}
                 style={{ borderRadius: '50%', width: 40, height: 40, marginRight: 8 }}
               />
+              <Typography 
+                 sx={{
+                     display:'flex',
+                     alignContent:'flex-end',
+                 }}
+              >
               <Typography variant="body1" fontWeight="bold">
                 {comment.author.username}
+                  </Typography>
+                  <Button
+                   onClick={() => DeleteArticle(slug, comment.id)}
+                   variant='text'
+                   sx={{ marginLeft: 40 }}
+                   >
+                        Delete
+                  </Button>
+              <Typography>
+                   
+                </Typography>
+
               </Typography>
             </Box>
             <Typography variant="body2" sx={{ mt: 1 }}>
               {comment.body}
             </Typography>
             <Typography variant="caption" color="textSecondary">
-              {new Date(comment.createdAt).toLocaleString()}
+              {new Date(comment.createdAt).toLocaleString()}    
             </Typography>
           </Box>
         ))}
@@ -126,14 +171,14 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
         alignItems: 'center',
         mt: 2,
         bgcolor: 'white',
-        borderTop: '1px solid #ddd',
+        borderTop: '1px solid #ddd',                                                              
         p: 1,
-      }}
-    >
-      <AttachFileIcon sx={{ marginRight: 1 }} color='success' fontSize='large'/>
+      }}                                           
+    >                                                       
+      {/* <AttachFileIcon sx={{ marginRight: 1 }} color='success' fontSize='large'/> */}
       <TextField
         label="Add Comment"
-        variant="filled"
+        variant="filled"                                                                                                                               
         value={commentTxt}
         onChange={(e) => setCommentTxt(e.target.value)}
         sx={{ flexGrow: 1, marginRight: 1 }}
@@ -141,7 +186,7 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
       <Button onClick={handleSend} variant="contained" color="primary">
         Send
       </Button>
-    </Box>
+    </Box>             
   </Box>
   );
 };

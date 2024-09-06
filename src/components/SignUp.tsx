@@ -14,6 +14,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Token } from '@mui/icons-material';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -36,7 +37,7 @@ export default function SignUp() {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
-  };
+  };        
   
   const onSubmit: SubmitHandler<ISignUpForm> = async (data) => {
     try {
@@ -81,7 +82,7 @@ export default function SignUp() {
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'center',       
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -103,7 +104,7 @@ export default function SignUp() {
                     minLength: {
                       value: 3,
                       message: 'Username must be at least 3 characters long'
-                    }
+                    }         
                   })}
                   error={!!errors.username}
                   helperText={errors.username?.message}
@@ -126,7 +127,7 @@ export default function SignUp() {
                   helperText={errors.email?.message}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12}>            
                 <TextField
                   fullWidth
                   label="Password"
@@ -165,11 +166,11 @@ export default function SignUp() {
               </Grid>
             </Grid>
           </Box>
-        </Box>
+        </Box>                    
       </Container>
       <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={4000}
+        open={snackbarOpen}    
+        autoHideDuration={4000}    
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Positioning Snackbar
       >
@@ -180,3 +181,4 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+                   

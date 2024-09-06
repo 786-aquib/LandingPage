@@ -18,7 +18,7 @@ function Profile() {
           padding: 0.5, // Optional: Add padding for spacing                   
           overflow: 'hidden', // Ensure no overflow
           width: '100%', // Ensure Box takes full width     
-          bgcolor: 'aliceblue'                            
+          bgcolor: 'aliceblue',                                       
         }}
       >
         <WebsiteName />

@@ -47,7 +47,7 @@ const AvatarDemo = () => {
       </Stack>
 
       <Popover
-        id={id}
+        id={id}       
         open={open}
         anchorEl={avatarEl}
         onClose={handleAvatarClose}
@@ -64,7 +64,7 @@ const AvatarDemo = () => {
             transform: 'translateY(-8)', // Fine-tune the vertical positioning
           },
         }}
-      >
+      >   
         <List disablePadding>
           <ListItem disablePadding>
             <ListItemButton onClick={navigateToProfile}>
@@ -95,7 +95,7 @@ const AvatarDemo = () => {
             </ListItemButton>
           </ListItem>
         </List>
-      </Popover>
+      </Popover>  
     </div>
   );
 };

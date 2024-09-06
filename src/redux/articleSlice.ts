@@ -37,7 +37,7 @@ const initialState: ArticlesState = {
   hasMore: true,
   offset: 0,
 };
-  
+
 // Async thunk for fetching articles
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
@@ -60,7 +60,6 @@ export const fetchArticles = createAsyncThunk(
 );
 
 // Async thunk for favoriting an article
-// In articleSlice.ts
 export const favoriteArticle = createAsyncThunk(
   'articles/favoriteArticle',
   async (slug: string, { rejectWithValue }) => {
@@ -84,7 +83,6 @@ export const favoriteArticle = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
       return data.article; // Assuming the response contains the updated article
     } catch (error) {
       return rejectWithValue('Error');
@@ -92,11 +90,10 @@ export const favoriteArticle = createAsyncThunk(
   }
 );
 
-
-
+// Async thunk for following a user
 export const followUser = createAsyncThunk(
   'users/followUser',
-  async (username: any, { rejectWithValue }) => {
+  async (username: string, { rejectWithValue }) => {
     const token = localStorage.getItem('token');
     if (!token) {
       return rejectWithValue('No token found');
@@ -126,7 +123,36 @@ export const followUser = createAsyncThunk(
 );
 
 
+export const UnfollowUser = createAsyncThunk(
+  'users/UnfollowUser',
+  async (username: string, { rejectWithValue }) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return rejectWithValue('No token found');
+    }
 
+    try {
+      const response = await fetch(`https://api.realworld.io/api/profiles/${username}/follow`, {
+        method:  'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Error following user');
+      }
+
+      const data = await response.json();
+      return data.profile; // Adjust if needed
+    } catch (error) {
+      return rejectWithValue('Error following user');
+    }
+  }
+);
 
 const articlesSlice = createSlice({
   name: 'articles',
@@ -149,11 +175,12 @@ const articlesSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch articles';
       })
+
+
       .addCase(favoriteArticle.pending, (state) => {
-        // Optionally, handle the pending state for the favorite action
+        state.status = 'loading';
       })
       .addCase(favoriteArticle.fulfilled, (state, action) => {
-        // Update the article in the state with the new favorited status
         const updatedArticle = action.payload;
         const index = state.articles.findIndex(article => article.slug === updatedArticle.slug);
         if (index !== -1) {
@@ -161,25 +188,52 @@ const articlesSlice = createSlice({
         }
       })
       .addCase(favoriteArticle.rejected, (state, action) => {
-        // Handle errors for the favorite action
         state.error = action.payload as string;
       })
+
+
       .addCase(followUser.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(followUser.fulfilled, (state, action) => {
-        state.status = 'idle';
-        const updatedArticle = action.payload;
-        const index = state.articles.findIndex(article => article.author === updatedArticle.author);
-        if (index !== -1) {
-          state.articles[index] = updatedArticle;
-        }
-      })
+          let userProfile = action.payload; // This should be the returned profile from the API with the correct `following` status
+          console.log("UserProfile ==> " + userProfile.username);
+          const index = state.articles.findIndex(article => article.author.username === userProfile.username);
+          
+          if (index !== -1) {
+            // Directly update the `following` status from the API response
+            console.log("Before update => ", state.articles[index].author.following);
+            state.articles[index].author.following = !state.articles[index].author.following;
+            userProfile.following = state.articles[index].author.following;
+            console.log("After update => ", state.articles[index].author.following);
+          }
+                })
       .addCase(followUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      })
+
+
+      .addCase(UnfollowUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(UnfollowUser.fulfilled, (state, action) => {
+          let userProfile = action.payload; // This should be the returned profile from the API with the correct `following` status
+          console.log("UserProfile ==> " + userProfile.username);
+          const index = state.articles.findIndex(article => article.author.username === userProfile.username);
+          
+          if (index !== -1) {
+            // Directly update the `following` status from the API response
+            console.log("Before update => ", state.articles[index].author.following);
+            state.articles[index].author.following = !state.articles[index].author.following;
+            console.log("After update => ", state.articles[index].author.following);
+          }
+         })
+      .addCase(UnfollowUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
       });
   },
 });
 
-export default articlesSlice.reducer;
+export default articlesSlice.reducer;                

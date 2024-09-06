@@ -7,35 +7,36 @@ import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { favoriteArticle } from '../redux/articleSlice';
-import { AppDispatch } from '../redux/store';
-import  followUser  from '../redux/articleSlice';
-import { error } from 'console';
+import { AppDispatch } from '../redux/store';            
+import  {followUser}  from '../redux/articleSlice';   
+import { UnfollowUser } from '../redux/articleSlice'; 
+import { error } from 'console';     
 
-                        
+                                                        
       
 interface ArticleCardProps {      
   slug: string;
-  image: string;
+  image: string;                                        
   title: string;           
-  author: string;
+  author: string;                                       
   description: string;
   favorited: boolean;   
-  favoritesCount: number;
-  createdAt: string;     
-  taglist: string[];
+  favoritesCount: number;   
+  createdAt: string;                                    
+  taglist: string[];  
   follow : boolean;
-}    
-
+}                                                       
+                                                                        
 const ArticleCard: React.FC<ArticleCardProps> = ({
-  slug,
+  slug,   
   image,
-  title,
-  author,
+  title,                                                 
+  author,  
   description,
   favorited,
-  favoritesCount,
-  createdAt,
-  taglist,      
+  favoritesCount,   
+  createdAt,          
+  taglist,                                         
   follow,
 }) => {
   const navigate = useNavigate();
@@ -49,11 +50,19 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   };
 
   const handleFollow = () => {
-    const username = author;           
+    const username = author;    
     console.log("username ==> ",username)
-    // dispatch(followUser(username));     
+    dispatch(followUser(username));     
     setIsfollow(!isfollow);
   };
+  
+  const handleUnFollow = () => {
+    const username = author;    
+    console.log("username ==> ",username)
+    dispatch(UnfollowUser(username));     
+    setIsfollow(!isfollow);
+  };
+
 
   const handleViewDetails = () => {
     navigate('/AllArticleData', {
@@ -63,7 +72,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         title,
         author,
         description,
-        favorited: isFavorited,
+        favorited: isFavorited,  
         favoritesCount,
         createdAt,
         taglist,
@@ -71,30 +80,30 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       },
     });
   };
-
+                                                
   return (
-    <Card
+    <Card    
       sx={{
         width: { xs: '100%', sm: '250px', md: '300px' },
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',        
         borderRadius: 2,
-        display: 'flex',
+        display: 'flex',                            
         flexDirection: 'column',
         overflow: 'hidden',
         position: 'relative',
         border: '1px solid #ddd',
-        minWidth: 700,
+        minWidth: 700,      
         minHeight: 200,
         bgcolor: 'whitesmoke',
       }}
-    >
+    >          
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 1.5,
-        }}
+          display: 'flex',             
+          justifyContent: 'space-between',             
+          alignItems: 'center',                                  
+          padding: 1.5, 
+        }}                   
       >
         <Stack direction="row" spacing={1.5} sx={{ flex: 1 }}>
           <Avatar alt="Author" src={image} sx={{ width: 50, height: 50 }} />
@@ -102,48 +111,48 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             <Typography
               onClick={handleViewDetails}
               sx={{
-                cursor: 'pointer',
+                cursor: 'pointer',       
                 fontSize: '1rem',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 display: '-webkit-box',
-                WebkitLineClamp: 1,
+                WebkitLineClamp: 1,                     
                 WebkitBoxOrient: 'vertical',
                 lineHeight: 1.2,
                 marginTop: 0.5,
-                marginLeft: 1,
-              }}
+                marginLeft: 1,           
+              }}                                                 
             >
               {author}
-            </Typography>
-            <Typography
-              sx={{
+            </Typography>          
+            <Typography  
+              sx={{                                                                   
                 color: 'text.secondary',
                 fontSize: '0.75rem',
-                marginLeft: 1,
-              }}
+                marginLeft: 1,                   
+              }}                                                                                          
             >
               {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
-            </Typography>
+            </Typography>             
           </Box>
-        </Stack>
-        <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={()=>handleFollow()}>
+        </Stack>                                                            
+        <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
           {isfollow ? (
-            <Typography sx={{ fontSize: '1rem', color: '#670a8e' }}>Following</Typography>
+            <Typography sx={{ fontSize: '1rem', color: '#670a8e' }} onClick={()=>handleUnFollow()}>Following</Typography>
           ) : (
             <Stack direction="row" spacing={0.2} alignItems="center">
               <AddIcon color='success' fontSize="small" />
-              <Typography sx={{ fontSize: '1rem', color: 'green' }}>Follow</Typography>
+              <Typography sx={{ fontSize: '1rem', color: 'green' }} onClick={()=>handleFollow()}>Follow</Typography>
             </Stack>
           )}
-        </Box>
+        </Box>       
       </Box>
-      <CardContent
+      <CardContent      
   sx={{
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: 1,
+    padding: 1,    
   }}
 >
   <Box onClick={handleViewDetails} sx={{ cursor: 'pointer' }}>
@@ -161,7 +170,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       {title}
     </Typography>
   </Box>
-
+        
   <Typography
     variant="body2"
     color="text.secondary"
@@ -175,7 +184,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       marginBottom: 0.5, // Small margin-bottom to ensure consistent spacing
     }}
   >
-    {description}
+    {description}                
   </Typography>
 </CardContent>
 
@@ -202,6 +211,6 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
       </CardActions>
     </Card> 
   );
-};
-
+};   
+    
 export default ArticleCard;

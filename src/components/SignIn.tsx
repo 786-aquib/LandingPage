@@ -65,7 +65,7 @@ export default function SignIn() {
 
         console.log('Sign in successful:', result);
         localStorage.setItem('token', result.user.token);
-        console.log("token : 2" + result.user.token);
+        
 
         navigate("/Home");
       } else {
@@ -189,3 +189,4 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+         

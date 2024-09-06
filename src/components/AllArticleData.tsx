@@ -21,6 +21,7 @@ function AllArticleData() {
   const article = articles.find(a => a.slug === slug);
 
   const handleFollowInAllArticle = () => {
+
       setIsFollowed(!isFollowed);
   }
                              
@@ -37,6 +38,7 @@ function AllArticleData() {
         height: '100vh',
         bgcolor: 'aliceblue',
         padding: 2,
+        overflowY: 'hidden',
         // overflow: 'hidden',
       }}
     >
@@ -89,10 +91,10 @@ function AllArticleData() {
               <Typography sx={{ fontSize: '1.2rem', color: 'green' }}>Follow</Typography>
             </Stack>
           )}
-        </Box>
+        </Box>                    
                       
-        <Box                    
-          sx={{
+        <Box                       
+          sx={{           
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
@@ -133,7 +135,7 @@ function AllArticleData() {
           </Box>
         </CardActions>    
       </Card>   
-      <Box sx={{ marginTop: 5,  minWidth: 200}}>
+      <Box sx={{ marginTop: 3,  minWidth: 200}}>
           <AddComment slug={article.slug} />
         </Box>
     </Box>

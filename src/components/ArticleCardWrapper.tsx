@@ -20,7 +20,7 @@ const ArticleCardWrapper: React.FC = () => {
         "fugit",
         "magnam"
     ],
-    follow: false,
+    follow: false,               
   };
 
   return <ArticleCard {...sampleArticle} />;
