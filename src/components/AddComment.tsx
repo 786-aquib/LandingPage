@@ -5,16 +5,16 @@ import axios from 'axios';
 interface Comment {
   id: number;
   body: string;
-  createdAt: string;
-  updatedAt: string;
-  author: {
+  createdAt: string;                       
+  updatedAt: string;         
+  author: {                 
     username: string; 
     bio: string;         
     image: string;
     following: boolean;
   };
-} 
- 
+}                         
+                                     
 const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentTxt, setCommentTxt] = useState<string>("");
@@ -29,7 +29,7 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
         setComments(response.data.comments);
       } catch (error) {
         console.error("Error fetching comments:", error);
-      }                
+      }                               
     };
     fetchComments();
   }, [slug]);
@@ -48,22 +48,22 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
           `https://api.realworld.io/api/articles/${slug}/comments`,  
           {     
             comment: {
-              body: commentTxt,
+              body: commentTxt,                 
             },    
           },
-          {
+          {                        
             headers: {  
               'Authorization': `Token ${token}`,
-            },
+            },                                       
           }
-        );
+        );                     
         console.log("Comment sent:", response.data);
         setComments((prevComments) => [ ...prevComments, response.data.comment]);
         setCommentTxt("");
       } catch (error) {
         console.error("Error sending comment:", error);
       }
-    }   
+    }                                    
   };        
   const DeleteComment = async (slug: string, id: number) => {
     try {
@@ -74,20 +74,20 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
       }
       console.log("Slug: ", slug);
       console.log("ID: ", id);
-      console.log("Sending comment with token: ", token);
+      console.log("Sending comment with token: ", token); 
       await axios.delete(
         `https://api.realworld.io/api/articles/${slug}/comments/${id}`,
         {
           headers: {
-            'Authorization': `Token ${token}`,
-          },
+            'Authorization': `Token ${token}`,         
+          },                                   
         }
       );                                                                                       
       setComments((prevComments) => prevComments.filter(comment => comment.id !== id));
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
-  };
+  };      
   return (
     <Box
     sx={{
@@ -105,17 +105,17 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
        sx={{
            display: 'flex',
            justifyContent: 'center',
-
+                                      
        }}
      variant="h6" gutterBottom>
-      Comments
+      Comments                
     </Typography>
     {comments.length > 0 ? (
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2 }}>          
         {comments.map((comment) => (
           <Box key={comment.id} sx={{ mb: 2, borderBottom: '1px solid #ddd', pb: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <img
+              <img           
                 src={comment.author.image}
                 alt={comment.author.username}
                 style={{ borderRadius: '50%', width: 40, height: 40, marginRight: 8 }}
@@ -132,13 +132,13 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
                   <Button
                    onClick={() => DeleteComment(slug, comment.id)}
                    variant='text'
-                   sx={{ marginLeft: 40 }}
+                   sx={{ marginLeft: 70 }}
                    >
                         Delete
                   </Button>
               <Typography>
                    
-                </Typography>
+                </Typography>         
 
               </Typography>
             </Box>
@@ -159,12 +159,12 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        mt: 2,
+        mt: 2,            
         bgcolor: 'white',
         borderTop: '1px solid #ddd',                                                              
         p: 1,
       }}                                           
-    >                                                       
+    >                                                                     
       {/* <AttachFileIcon sx={{ marginRight: 1 }} color='success' fontSize='large'/> */}
       <TextField
         label="Add Comment"
@@ -178,7 +178,7 @@ const CommentsSection: React.FC<{ slug: string }> = ({ slug }) => {
       </Button>
     </Box>             
   </Box>
-  );
+  );          
 };
 
 export default CommentsSection;

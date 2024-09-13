@@ -19,11 +19,12 @@ const ArticleCardWrapper: React.FC = () => {
         "voluptatem",           
         "fugit",
         "magnam"
-    ],
+    ],     
     follow: false,               
   };
-
+ 
   return <ArticleCard {...sampleArticle} />;
 };
 
 export default ArticleCardWrapper;
+       

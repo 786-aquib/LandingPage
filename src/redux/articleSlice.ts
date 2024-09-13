@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from './store'; // Adjust the import path
+import { AppDispatch } from './store'; 
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
@@ -37,7 +37,7 @@ const initialState: ArticlesState = {
   hasMore: true,
   offset: 0,
 };
-
+                                                                                                  
 // Async thunk for fetching articles
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
@@ -49,16 +49,16 @@ export const fetchArticles = createAsyncThunk(
         'Content-Type': 'application/json',
       },
     });
-
+                                                                                                            
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
+    }                                     
+                                                                                                                                       
     const data = await response.json();
     return data;
   }
 );
-
+                                                                  
 // Async thunk for favoriting an article
 export const favoriteArticle = createAsyncThunk(
   'articles/favoriteArticle',
@@ -72,7 +72,7 @@ export const favoriteArticle = createAsyncThunk(
       const response = await fetch(`https://api.realworld.io/api/articles/${slug}/favorite`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
+          'Accept': 'application/json',  
           'Content-Type': 'application/json',
           'Authorization': `Token ${token}`,
         },
@@ -122,6 +122,7 @@ export const followUser = createAsyncThunk(
   }
 );
 
+// Async thunk for Unfollowing a user
 
 export const UnfollowUser = createAsyncThunk(
   'users/UnfollowUser',
@@ -151,14 +152,18 @@ export const UnfollowUser = createAsyncThunk(
     } catch (error) {
       return rejectWithValue('Error following user');
     }
-  }
+  }            
 );
 
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
   reducers: {
+
     // Optional: Add any synchronous reducers here
+    addArticle(state, action) {
+      state.articles = [action.payload, ...state.articles];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -237,3 +242,5 @@ const articlesSlice = createSlice({
 });
 
 export default articlesSlice.reducer;                
+
+

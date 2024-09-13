@@ -11,13 +11,13 @@ import { AppDispatch } from '../redux/store';
 
 interface ArticleCardProps {
   slug: string;
-  image: string;
+  image: string;          
   title: string;
   author: string;
   description: string;
   favorited: boolean;
-  favoritesCount: number;
-  createdAt: string;
+  favoritesCount: number;                 
+  createdAt: string;      
   taglist: string[];
   follow: boolean;
 }
@@ -25,15 +25,15 @@ interface ArticleCardProps {
 const ArticleCard: React.FC<ArticleCardProps> = ({
   slug,
   image,
-  title,
-  author,
+  title,                                         
+  author,           
   description,
   favorited,
   favoritesCount,
   createdAt,
-  taglist,
-  follow,
-}) => {
+  taglist,             
+  follow,        
+}) => {        
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [isFavorited, setIsFavorited] = useState(favorited);
@@ -49,10 +49,18 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     setIsFollow(true);
   };
 
-  const handleUnfollow = () => {
+  const handleUnfollow = () => {                             
     dispatch(UnfollowUser(author));
     setIsFollow(false);
   };
+
+  const handleViewProfile = () => {
+    navigate('/ProfileDetail', {
+      state: {
+        username : author,
+      }
+    });
+  }
 
   const handleViewDetails = () => {
     navigate('/AllArticleData', {
@@ -60,16 +68,16 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         slug,
         image,
         title,
-        author,
+        author,                                
         description,
         favorited: isFavorited,
         favoritesCount,
         createdAt,
         taglist,
         follow: isFollow,
-      },
+      },                                       
     });
-  };
+  };                                                             
 
   return (
     <Card
@@ -77,18 +85,18 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         width: '100%',
         maxWidth: 600, 
         boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-        borderRadius: 2,
+        borderRadius: 2,                         
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        overflow: 'hidden',                        
         position: 'relative',
-        border: '1px solid #ddd',
-        bgcolor: 'whitesmoke',
+        border: '1px solid #ddd',                                                                                                                       
+        bgcolor: 'whitesmoke',                                                                                                  
         mx: 'auto',
         minHeight: 200,
       }}
     >
-      <Box
+      <Box                                                          
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -100,18 +108,18 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           <Avatar alt="Author" src={image} sx={{ width: 50, height: 50 }} />
           <Box>
             <Typography
-              onClick={handleViewDetails}
+              onClick={handleViewProfile}
               sx={{
                 cursor: 'pointer',
                 fontSize: '1rem',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                textOverflow: 'ellipsis',                                                                      
                 display: '-webkit-box',
                 WebkitLineClamp: 1,
                 WebkitBoxOrient: 'vertical',
                 lineHeight: 1.2,
                 marginTop: 0.5,
-                marginLeft: 1,
+                marginLeft: 1,                                                                        
               }}
             >
               {author}
@@ -124,10 +132,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
               }}
             >
               {formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
-            </Typography>
+            </Typography>                
           </Box>
         </Stack>
-        <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>    
           {isFollow ? (
             <Typography sx={{ fontSize: '1rem', color: '#670a8e' }} onClick={handleUnfollow}>
               Following
@@ -139,13 +147,13 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
                 Follow
               </Typography>
             </Stack>
-          )}
+          )}                    
         </Box>
       </Box>
       <CardContent
         sx={{
           flex: 1,
-          display: 'flex',
+          display: 'flex',          
           flexDirection: 'column',
           padding: 1,
         }}
@@ -155,13 +163,15 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
             variant="body2"
             color="ActiveCaption"
             sx={{
-              overflow: 'hidden',
+              overflow: 'hidden',                                                         
               textOverflow: 'ellipsis',
               fontSize: '0.875rem',
               marginBottom: 2,
+              WebkitLineClamp: 1,                                                    
+              WebkitBoxOrient: 'vertical',                                                                    
             }}
           >
-            {title}
+            {title}                                   
           </Typography>
         </Box>
 
@@ -170,41 +180,42 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
           color="text.secondary"
           sx={{
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            textOverflow: 'ellipsis',                     
             display: '-webkit-box',
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 2,                                                                                                                                                            
             WebkitBoxOrient: 'vertical',
             fontSize: '0.75rem',
-            marginBottom: 0.5,
+            marginBottom: 0.5,            
           }}
         >
-          {description}
+          {description}                                                    
         </Typography>
       </CardContent>
 
       <CardActions
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'space-between',                                    
           padding: 1,
         }}
       >
         <Stack direction="row" spacing={0.5}>
-          {taglist.map((tag, index) => (
+          {taglist.map((tag, index) => (                     
             <Chip key={index} label={tag} variant={index % 1 === 0 ? 'filled' : 'outlined'} />
           ))}
         </Stack>
 
         <Box onClick={handleClick} sx={{ cursor: 'pointer' }}>
           {isFavorited ? (
-            <FavoriteIcon color="warning" fontSize="small" />
-          ) : (
-            <FavoriteBorderIcon color="disabled" fontSize="small" />
+            <FavoriteIcon color="warning" fontSize="small" />                                                                                                 
+          ) : (                                             
+            <FavoriteBorderIcon color="disabled" fontSize="small" />                        
           )}
         </Box>
       </CardActions>
     </Card>
-  );
+  );                  
 };
 
-export default ArticleCard;                  
+export default ArticleCard;                                                                                                                                    
+                                 

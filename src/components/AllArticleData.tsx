@@ -10,7 +10,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddComment from './AddComment';
 import { grey } from '@mui/material/colors';
-
+                                                                 
 function AllArticleData() {          
   const location = useLocation();
 
@@ -25,27 +25,25 @@ function AllArticleData() {
   if (!article) {
     return <div>No article data available</div>;
   }
-
   return (
     <Box
-      sx={{                     
-        display: 'flex',
+      sx={{                              
+        display: 'flex',                                      
         justifyContent: 'center',                           
         minWidth: 700,
         height: '100vh',           
         bgcolor: 'aliceblue',
-        padding: 2,
-        overflowY: 'hidden',
-        // overflow: 'hidden',
+        padding: 2,                 
+        overflowY: 'hidden',                       
       }}
     >
-      <Card
+      <Card   
         sx={{
-          display: 'flex',
+          display: 'flex',         
           flexDirection: 'column',
           marginLeft: 10,
           marginRight: 10,
-          marginTop: 5,
+          marginTop: 5,  
           marginBottom: 10,                               
           bgcolor: 'aliceblue',
           width: '100%',
@@ -53,7 +51,7 @@ function AllArticleData() {
           padding: 3,
           overflowY: 'hidden',
 
-        }}
+        }}           
       >
         <Box
           sx={{
@@ -66,12 +64,12 @@ function AllArticleData() {
           <Avatar
             src={article.author.image}
             sx={{ width: 120, height: 120, marginBottom: 2 }}
-          />
+          />                                  
           <Typography
             variant="h6"
             component="div"
             sx={{ textAlign: 'center', mb: 1 }}
-          >
+          >                                            
             {article.author.username}
           </Typography>
         </Box>
@@ -89,8 +87,8 @@ function AllArticleData() {
                       
         <Box                                  
           sx={{           
-            display: 'flex',
-            flexDirection: 'column',   
+            display: 'flex',                                                                                                                                        
+            flexDirection: 'column',                  
             alignItems: 'flex-start',
             textAlign: 'left',
           }}            
@@ -108,13 +106,13 @@ function AllArticleData() {
                                               
         <CardActions                
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
+            display: 'flex',                
+            justifyContent: 'space-between',                                 
             padding: 1.5,                      
             marginTop: 4,
           }}   
         >
-          <Stack direction="row" spacing={2} fontSize={4}>
+          <Stack direction="row" spacing={2} fontSize={4}>    
             {article.tagList.map((tag, index) => (
               <Chip key={index} label={tag} variant={index % 1 === 0 ? 'filled' : 'outlined'} size="medium" />
             ))}

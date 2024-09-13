@@ -55,7 +55,8 @@ export default function SignIn() {
       });
 
     //  https://api.realworld.io//api/articles/:slug/favorite
-
+    //  https://api.realworld.io/api/articles/:slug
+ 
       if (response.ok) {
         const result = await response.json();
         let successMessage = "Sign-In Successful!";
@@ -95,7 +96,7 @@ export default function SignIn() {
       setSnackbarOpen(true);
     } finally {
       setLoading(false); // End loading
-    }
+    }         
   };
 
   return (
@@ -126,7 +127,7 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               {...register('email', {
-                required: 'Email is required',
+                required: 'Email is required',                                                                              
                 pattern: {
                   value: /\S+@\S+\.\S+/,
                   message: 'Type a Valid Email Address'
@@ -161,7 +162,7 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2 }}     
               disabled={loading} // Disable button when loading
             > 
               Sign In
@@ -172,8 +173,8 @@ export default function SignIn() {
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid>
-          </Box>
+            </Grid>  
+          </Box>            
         </Box>
       </Container>
       <Snackbar
@@ -187,6 +188,22 @@ export default function SignIn() {
         </Alert>
       </Snackbar>
     </ThemeProvider>
-  );
+  );                 
 }
-         
+                         
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

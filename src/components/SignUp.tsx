@@ -72,7 +72,7 @@ export default function SignUp() {
       setSnackbarOpen(true);
     }
   };
-
+                                                                        
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -94,7 +94,7 @@ export default function SignUp() {
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                <TextField            
                   fullWidth
                   label="Username"
                   id="username"
@@ -113,7 +113,7 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  label="Email Address"                  
                   id="email"
                   autoComplete="email"
                   {...register('email', {
@@ -148,7 +148,7 @@ export default function SignUp() {
                   error={!!errors.password}
                   helperText={errors.password?.message}
                 />
-              </Grid>
+              </Grid>       
             </Grid>
             <Button
               type="submit"
@@ -181,4 +181,4 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
-                   
+                                                                                                                                               

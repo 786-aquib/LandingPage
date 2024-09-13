@@ -9,6 +9,9 @@ import ArticleCardWrapper from './components/ArticleCardWrapper';
 import Profile from './components/Profile';
 import AllArticleData from './components/AllArticleData';
 import './styles/global.css'
+import Wishlisted from './components/Wishlisted';
+import ProfileDetail from './components/ProfileDetail';
+import AddNewArticle from './components/AddNewArticle';
 
 const App: React.FC = () => {       
   return (
@@ -22,9 +25,13 @@ const App: React.FC = () => {
         <Route path="/articles" element={<ArticlesList />} />
         <Route path="/article-card" element={<ArticleCardWrapper />} />
         <Route path = '/AllArticleData' element = {<AllArticleData/>} />
+        <Route path = '/Wishlisted' element = {<Wishlisted/>} />
+        <Route path = '/ProfileDetail' element = {<ProfileDetail/>} />
+        <Route path = '/AddNewArticle' element = {<AddNewArticle/>} />
+
       </Routes>
     </Router>
-  );
+  );                 
 };
 
 export default App;
